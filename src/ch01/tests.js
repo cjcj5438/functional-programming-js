@@ -15,6 +15,7 @@ QUnit.module('Chapter 1');
 
 // Use "run" as an alias in chapter 1. This is shown to just
 // warm up to the concept of composition
+// 组合函数 里面的函数右边往左边执行
 const run = R.compose;
 
 QUnit.test("Listing 1.1 Functional printMessage", function () {
@@ -77,14 +78,13 @@ QUnit.test("Listing 1.3 Imperative showStudent function with side effects", func
 });
 
 // Using alias for curry
-const curry = R.curry;
+const curry = R.curry; //这个没有什么好理解，就是多个参数变成一个参数一个一个的执行
 
 QUnit.test("Listing 1.4 Decomposing the showStudent program", function () {
     // The book uses a mock storage object in chapter 1.
     // Instead of appending to the DOM, I write to the console
 
     const db = require('./helper').db;
-    
     const find = curry((db, id) => {
     	let obj = db.find(id);
     	if(obj === null) {
@@ -127,10 +127,12 @@ QUnit.test("Listing 1.5 Programming with function chains", function () {
 	];
 
 	const result = 
-	          _.chain(enrollments)
-	 		   .filter(student => student.enrolled > 1)
-	           .map(_.property('grade'))
-	           .mean()
+	          _.chain(enrollments) //链式调用 最后的时候， 要用value（） 结尾显示的调用
+	 		   .filter(student => student.enrolled > 1) //返回一个新的过滤后的数组。
+				  //property（path）传入对象路径 返回的是数组的对象
+				  // map 遍历
+	           .map(_.property('grade')) //
+	           .mean()//返回平均值
 	           .value();
 
 	console.log(result);    
