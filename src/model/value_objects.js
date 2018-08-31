@@ -13,6 +13,7 @@ function coordinate(lat, long) {
 			return _long;
 		},
 		translate: function (dx, dy) {
+			//这么写可以实现链式调用, 简化函数, 不需要再次的new 这个函数
 			return coordinate(_lat + dx, _long + dy);
 		},
 		toString: function () {
@@ -31,6 +32,7 @@ function zipCode(code, location) {
 		location: function () {
 			return _location;
 		},
+		// 改变值的关系
 		fromString: function (str) {
 			let parts = str.split('-');
 			return zipCode(parts[0], parts[1]);

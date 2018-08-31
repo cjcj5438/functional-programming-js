@@ -21,12 +21,15 @@ var p4 = new Person('444-44-4444', 'Alonzo', 'Church', 1903, new Address('US'));
 var persons = [p1, p2, p3, p4];
 
 QUnit.test("Understanding reduce", function () {
-	let result = _(persons).reduce((stat, person) => {
-		const country = person.address.country;
-		stat[country] = _.isUndefined(stat[country]) ? 1 :
-		stat[country] + 1;
-		return stat;
-	}, {});
+    //需求就是找出 persons里是us 的城市有几个
+    let result = _(persons)
+    // _() 和_.chain(value) 表达意思一样
+        .reduce((stat, person) => {
+            const country = person.address.country;
+            stat[country] = _.isUndefined(stat[country]) ? 1 :
+                stat[country] + 1;
+            return stat;
+        }, {});
 
 	assert.deepEqual(result, {
 		'US' : 2,
