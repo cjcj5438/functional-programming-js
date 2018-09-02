@@ -2,7 +2,6 @@
   Chapter 3 code listings
   Author: Luis Atencio
 */
-
 "use strict";
 
 QUnit.module('Chapter 3');
@@ -51,9 +50,18 @@ QUnit.test("Combining map and reduce", function () {
 
 
 QUnit.test("Combining map and reduce with lenses", function () {
+	/*
+	* R.view 一般和lens相关方法一起使用,  返回要显示的 属性
+	* R.path
+	* 			例子属于object 的api : R.path(数组路径, 目标对象);
+	* 			R.path(['a', 'b'], {a: {b: 2}}); //2
+	* R.assocPath 浅复制对象参数和path 的参数类似, R.assocPath(['a', 'b', 'c'], 42, {a: {b: {c: 0}}}); //=> {a: {b: {c: 42}}}
+	* R.lens //这个就相当于对象的 getter 和setter 方法 但是不会改变原数据
+	* */
 	const cityPath = ['address','city'];
 	const cityLens = R.lens(R.path(cityPath), R.assocPath(cityPath));
 	const gatherStats = (stat, criteria) => {
+        // isUndefined 是不是undefined
 		stat[criteria] = _.isUndefined(stat[criteria]) ? 1 :
 			stat[criteria] + 1;
 		return stat;
@@ -64,6 +72,10 @@ QUnit.test("Combining map and reduce with lenses", function () {
 });
 
 QUnit.test("Valid or not valid", function () {
+	/*
+	* _.some ([], 判断值)   遍历器 如果有真值 就马上停止, 返回true
+	* _.evert          				如果有假值, 就马上停止, 返回false
+	* */
 	const isNotValid = val => _.isUndefined(val) || _.isNull(val);
 	const notAllValid = args => _(args).some(isNotValid);
 	assert.ok(notAllValid (['string', 0, null, undefined])); //-> false
@@ -95,7 +107,9 @@ QUnit.test("Array processing with Lodash", function () {
 				 'John Von Neumann', 'stephen_kleene'];
 
 	const isValid = val => !_.isUndefined(val) && !_.isNull(val);
-
+ /*
+ * 返回重后的数组
+ * */
 	var result = _.chain(names).filter(isValid).map(s => s.replace(/_/, ' '))
 		.uniq().map(_.startCase).sort().value();
 
@@ -161,11 +175,12 @@ QUnit.test("Lazy function chains", function () {
 
 
 QUnit.test("SQL-like JavaScript", function () {
-
+	/* 就是函数方法继承， 把自己写的函数挂到 _ 的loadch 上 */
 	_.mixin({'select': _.map,
 			 'from': _.chain,
 			 'where': _.filter
 			});
+	// 一下挂了三个方法上去
 
 	let result = _.from(persons)
 		.where(p => p.birthYear > 1900 && p.address.country !== 'US')
