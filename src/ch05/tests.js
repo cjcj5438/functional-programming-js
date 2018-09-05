@@ -29,6 +29,7 @@ QUnit.test("Simple Wrapper test", function () {
 });
  
 QUnit.test("Simple functor test", function () {
+	//这步是函数柯里化
 	const plus = R.curry((a, b) => a + b);
 	const plus3 = plus(3);
 	const plus10 = plus(10);
