@@ -18,14 +18,14 @@ const normalize = (str) => str.replace(/\-/g, '');
 QUnit.test("Chaining methods together", function () {
 
 	let names = ['alonzo church', 'Haskell curry', 'stephen_kleene',
-				 'John Von Neumann', 'stephen_kleene'];
+        'John Von Neumann', 'stephen_kleene'];
     
     let result = _.chain(names)
-		.filter(isValid)
-		.map(s => s.replace(/_/, ' '))
+		.filter(isValid) //判断是不是有值
+		.map(s => s.replace(/_/, ' ')) //符号处理
 		.uniq()
-		.map(_.startCase)
-		.sort()
+		.map(_.startCase) //转换字符串格式
+		.sort() //排序
 		.value();		
 
 	assert.deepEqual(result, [ 'Alonzo Church', 'Haskell Curry', 'John Von Neumann', 'Stephen Kleene' ]);	
@@ -61,6 +61,7 @@ QUnit.test("Tuple test", function () {
 QUnit.test("Extending the core language", function () {
 
 	// Take the first N characters
+    // 创建一个函数。 该函数调用 func，并传入预设的 partials 参数。 这个方法类似 _.bind
 	String.prototype.first = _.partial(String.prototype.substring, 0, _);
 	let result = 'Functional Programming'.first(3); // -> 'Fun'
 	assert.equal(result, 'Fun');
@@ -71,9 +72,9 @@ QUnit.test("Extending the core language", function () {
 	assert.equal(result, 'Church, Alonzo');
 
 	String.prototype.explode = _.partial(String.prototype.match, /[\w]/gi);
-	result = 'ABC'.explode(); //-> 
+	result = 'ABC'.explode(); //->
 	assert.deepEqual(result, ['A', 'B', 'C']);
-	
+
 	// Parses a simple URL
 	String.prototype.parseUrl = _.partial(String.prototype.match, /(http[s]?|ftp):\/\/([^:\/\s]+)\.([^:\/\s]{2,5})/);
 	result = 'http://example.com'.parseUrl(); // -> ['http', 'example', 'com']
@@ -82,9 +83,11 @@ QUnit.test("Extending the core language", function () {
 
 
 QUnit.test("Composition", function () {
+	// 查询有几个单词
 	const str = `We can only see a short distance ahead but we can see plenty there that needs to be done`;
 	const explode = (str) => str.split(/\s+/);
-	const count = (arr) => arr.length;
+	const count = (arr) => arr.length
+	// R.compose() 的用法 ，右边的函数先执行
 	const countWords = R.compose(count, explode);
 	assert.equal(countWords(str), 19); //-> 19	
 });
@@ -95,7 +98,7 @@ QUnit.test("More composition", function () {
 	const normalize = (str) => str.replace(/\-/g, '');
 	const validLength = (param, str) => str.length === param;
 	const checkLengthSsn = _.partial(validLength, 9);	
-
+         
 	const cleanInput = R.compose(normalize, trim);
 	const isValidSsn = R.compose(checkLengthSsn, cleanInput);
 	let result = cleanInput(' 444-44-4444 '); //-> '444444444'
