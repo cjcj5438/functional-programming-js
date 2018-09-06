@@ -36,7 +36,7 @@ QUnit.test("Simple functor test", function () {
 	const two = wrap(2);
 	const five = two.fmap(plus3); //-> Wrapper(5)
 	assert.equal(five.map(R.identity), 5); //-> 5
-
+////////////////////////////////////
 	assert.equal(two.fmap(plus3).fmap(plus10).map(R.identity), 15); //-> Wrapper(15)
 });
 
